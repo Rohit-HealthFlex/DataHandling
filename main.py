@@ -9,12 +9,12 @@ if __name__ == '__main__':
     folder_name = "data/test/"
     req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°)"
     device_ids = []
-    animation = False
+    animation = True
     sample_rate = 30
     draw_quiver = True
     save_trajectory = False
     show_trajectory = True
-    save_fft = True
+    save_fft = False
     show_fft = True
     azimuthal_rotation = 10
 
@@ -44,13 +44,13 @@ if __name__ == '__main__':
                                               draw_quiver=draw_quiver,
                                               save=save_trajectory, show=show_trajectory,
                                               target_dir=target_dir, save_video=False)
-                plot_fft(*acc_info,
-                         save=save_fft, show=show_fft,
-                         target_dir=target_dir)
+                # plot_fft(*acc_info,
+                #          save=save_fft, show=show_fft,
+                #          target_dir=target_dir)
                 # x = pos_info[0].reshape(-1, 1)
                 # y = pos_info[1].reshape(-1, 1)
                 # dist, warp = compute_dtw(x, y)
                 # print(dist)
                 plt.show()
 
-        # break
+        break
