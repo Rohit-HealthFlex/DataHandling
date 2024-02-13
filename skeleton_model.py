@@ -1,4 +1,5 @@
 import json
+import cv2
 from copy import deepcopy
 import matplotlib.pyplot as plt
 import numpy as np
@@ -13,9 +14,9 @@ def normalize(st, end, expected_length=0.3):
 
     scale = norm_dir / expected_length[0]
     if 0.5 > scale or scale > 1.5:
-        print("#####", scale, norm_dir, expected_length[0])
+        # print("#####", scale, norm_dir, expected_length[0])
         end = dir_vector/scale
-        print("###after change", np.linalg.norm(end))
+        # print("###after change", np.linalg.norm(end))
         # else:
         #     scale = norm_dir / expected_length[0]
         #     end = dir_vector/scale
@@ -65,12 +66,14 @@ class Segment:
 class Skeleton:
 
     def __init__(self, point_device_map,
-                 skip_points=[17, 19, 21, 22, 20, 18, 31, 29, 30, 32, 7, 3, 2, 1, 0, 4, 5, 6, 8, 9, 10]):
+                 skip_points=[17, 19, 21, 22, 20, 18, 31, 29,
+                              30, 32, 7, 3, 2, 1, 0, 4, 5, 6, 8, 9, 10]):
         self.landmarks = np.array(list(point_device_map["landmarks"].values()))
         self.skip_points = skip_points
         self.joints = {}
         self.point_device_map = {}
-        for idx, values in enumerate(point_device_map["connections_info"]):
+        for idx, key in enumerate(point_device_map["connections_info"]):
+            values = point_device_map["connections_info"][key]
             point_pair = values["point_pairs"]
             if int(point_pair[0]) in skip_points or int(point_pair[1]) in skip_points:
                 continue
@@ -108,10 +111,10 @@ class Skeleton:
                     line1 = self.landmarks[point_pair]
                     line2 = self.landmarks[rem_points]
                     angle = get_angle_bw_line_segments(line1, line2)
-                    print(point_pair, rem_points, angle)
-            print("####")
+                    # print(point_pair, rem_points, angle)
+            # print("####")
 
-    def plot_skeleton(self):
+    def plot_skeleton(self, save_video=False):
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot(projection='3d')
         plt.title('Skeleton')
@@ -145,14 +148,19 @@ class Skeleton:
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
         ax.set_zlabel("Z")
-        ax.view_init(azim=90, elev=90)
+        ax.view_init(azim=-37, elev=-155)
         self.estimate_angle()
+
+        if save_video:
+            return fig
         plt.show()
         # self.landmarks = deepcopy(self.init_landmark)
 
 
 if __name__ == "__main__":
-    map_dict = json.load(open("configs/init_pose.json"))
+    dev_id = "fc:66:87:ee:fb:8c"
+    map_dict = json.load(open("configs/poser.json"))
+    map_dict["connections_info"]["26_28"]["device_id"] = dev_id
     sk_obj = Skeleton(point_device_map=map_dict)
     sk_obj.plot_skeleton()
 
@@ -160,8 +168,9 @@ if __name__ == "__main__":
         print(idx)
         axis = [4, 4, 1]
         theta = np.pi/np.random.uniform(1, 4)
-        T = rotation_matrix_2d(axis, theta)
-        sk_obj.update_landmarks("123", T)
+        T = rotation_matrix_3d(axis, theta).reshape(1, 3, 3)
+        print(T.shape)
+        sk_obj.update_landmarks(dev_id, T)
         # sk_obj.estimate_angle()
         sk_obj.plot_skeleton()
 

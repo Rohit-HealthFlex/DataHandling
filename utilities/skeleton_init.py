@@ -15,20 +15,22 @@ def postprocess_json(pose_data):
     final_out = {}
     final_out["landmarks"] = {}
     for l in landmark:
-        points = landmark[l]
+        points = list(landmark[l])
         points[-1] = 0
         final_out["landmarks"][l] = points
 
-    vec = []
+    vec = {}
     for j in joints:
         dict_ = {}
         dict_["point_pairs"] = j
         dict_["device_id"] = "###"
         dict_["centricity"] = 0.5
-        vec.append(dict_)
+        # vec.append(dict_)
+        key = "_".join(list(map(str, j)))
+        vec[key] = dict_
 
     # vec[3]["device_id"] = "123"
-    # final_out["connections_info"] = vec
+    final_out["connections_info"] = vec
 
     return final_out
 
@@ -76,15 +78,17 @@ def initialize_skeleton(image_files,
             out_dict["landmarks"] = landmark_dict
             out_dict["connections"] = list(mp_pose.POSE_CONNECTIONS)
             # Plot pose world landmarks.
-            mp_drawing.plot_landmarks(
-                results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
+            # mp_drawing.plot_landmarks(
+            #     results.pose_world_landmarks, mp_pose.POSE_CONNECTIONS)
 
             out_dict = postprocess_json(out_dict)
+            os.makedirs(target_folder, exist_ok=True)
             save_path = os.path.join(target_folder, file.split(".")[0]+".json")
             with open(save_path, "w") as f:
                 json.dump(out_dict, f, indent=4)
 
 
 if __name__ == "__main__":
-    image_files = ["person.png"]
-    initialize_skeleton(image_files)
+    image_files = ["poser.png"]
+    initialize_skeleton(image_files,
+                        target_folder="../configs")
