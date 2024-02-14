@@ -62,13 +62,18 @@ if __name__ == '__main__':
                     target_dir = f"outputs/{name}/{device_id}"
                     pos_info, body_info, acc_info, rot_mat = obj.parse_data(
                         device_id=device_id)
-                    dev_info[device_id] = rot_mat
+                    dev_info[device_id] = (rot_mat, pos_info)
 
                 for k in tqdm(range(len(rot_mat))):
                     for dev_id in dev_info:
-                        T = dev_info[dev_id][k]
+                        T = dev_info[dev_id][0][k]
+                        pos_T = dev_info[dev_id][1][k]
+                        print(pos_T)
+
                         sk_obj.update_landmarks(device_id=dev_id,
-                                                T=T)
+                                                rot_T=T, trans_T=pos_T)
+                        sk_obj.translate(T=pos_T)
+
                     fig = sk_obj.plot_skeleton(save_video=save_video)
                     if save_video:
                         frame = get_img_from_fig(fig)

@@ -53,10 +53,18 @@ class Segment:
         return out
 
     def update_segment(self, landmarks, T):
+        rot_T, trans_T = T
         p0, p1 = self.pos
         vec0, vec1 = landmarks[p0], landmarks[p1]
-        vec0 = self.rotate_joint(vec0, T)
-        vec1 = self.rotate_joint(vec1, T)
+
+        vec0 = self.rotate_joint(vec0, rot_T)
+        vec1 = self.rotate_joint(vec1, rot_T)
+        print("after rotation", self.device_id, vec0)
+
+        vec0 += trans_T
+        vec1 += trans_T
+
+        print("after translation", self.device_id, vec0)
         # vec0, vec1 = self.normalize(vec0, vec1)
         landmarks[p0] = vec0
         landmarks[p1] = vec1
@@ -98,9 +106,13 @@ class Skeleton:
             mean_length[f"{st}_{end}"] = [norm_diff, *diff]
         return mean_length
 
-    def update_landmarks(self, device_id, T):
+    def update_landmarks(self, device_id, rot_T, trans_T):
         segment = self.point_device_map[device_id]
+        T = [rot_T, trans_T]
         self.landmarks = segment.update_segment(self.landmarks, T)
+
+    def translate(self, T):
+        self.landmarks += T
 
     def estimate_angle(self):
         for dev_id in self.point_device_map:
@@ -122,14 +134,14 @@ class Skeleton:
         plt.ylim(-1, 1)
         plt.ylim(-1, 1)
         pos = np.delete(range(0, len(self.landmarks)), self.skip_points)
-        for idx in self.joints:
-            bone = self.joints[idx]["bone"]
-            st, end = bone[0], bone[1]
-            vec0, vec1 = normalize(self.landmarks[st],
-                                   self.landmarks[end],
-                                   expected_length=self.mean_length[f"{st}_{end}"])
-            self.landmarks[st] = vec0
-            self.landmarks[end] = vec1
+        # for idx in self.joints:
+        #     bone = self.joints[idx]["bone"]
+        #     st, end = bone[0], bone[1]
+        #     vec0, vec1 = normalize(self.landmarks[st],
+        #                            self.landmarks[end],
+        #                            expected_length=self.mean_length[f"{st}_{end}"])
+        #     self.landmarks[st] = vec0
+        #     self.landmarks[end] = vec1
         x, y, z = self.landmarks[:,
                                  0], self.landmarks[:, 1],  self.landmarks[:, 2]
         ax.scatter(x[pos], y[pos], z[pos])
@@ -151,7 +163,7 @@ class Skeleton:
         ax.set_xlim((-1, 1))
         ax.set_ylim((-1, 1))
         ax.set_zlim((-1, 1))
-        ax.view_init(azim=-37, elev=-155)
+        ax.view_init(azim=-88, elev=-96)
         self.estimate_angle()
 
         if save_video:

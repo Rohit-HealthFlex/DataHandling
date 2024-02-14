@@ -39,15 +39,28 @@ class DataParser:
                         [np.sin(-z), np.cos(-z), 0],
                         [0,      0,       1]])
 
+    # def read_data(self, filename, req_cols=None):
+    #     df = pd.read_csv(filename)
+    #     df["Time"], df["Device name"] = df["Device name"], df["Time"]
+    #     if req_cols is None:
+    #         req_cols = df.columns
+    #     if isinstance(req_cols, str):
+    #         req_cols = req_cols.strip().split(",")
+    #     req_df = df[req_cols]
+    #     self.device_ids = req_df["Device name"].unique()
+    #     print(req_df)
+    #     return df, req_df
+
     def read_data(self, filename, req_cols=None):
         df = pd.read_csv(filename)
-        df["Time"], df["Device name"] = df["Device name"], df["Time"]
-        if req_cols is None:
-            req_cols = df.columns
+        df = df.reset_index()
+        df.iloc[:, :] = df.iloc[:, :].shift(axis=1)
+        df = df.drop(["index"], axis=1)
         if isinstance(req_cols, str):
             req_cols = req_cols.strip().split(",")
         req_df = df[req_cols]
         self.device_ids = req_df["Device name"].unique()
+        print(req_df.head())
         return df, req_df
 
     def get_acceleration(self, df):
@@ -94,7 +107,7 @@ class DataParser:
                                                           ) @ self.R_z(-yaw[i]) @ earth_z[:, i]
             rot_xyz += [self.R_x(-pitch[i]) @ self.R_y(-roll[i]
                                                        ) @ self.R_z(-yaw[i])]
-        pos_info = (x, y, z)
+        pos_info = np.array([x, y, z]).T
         body_info = (body_x, body_y, body_z)
         acc_info = (acc_x, acc_y, acc_z)
         return pos_info, body_info, acc_info, rot_xyz
