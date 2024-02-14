@@ -21,7 +21,7 @@ if __name__ == '__main__':
     save_fft = False
     show_fft = True
     azimuthal_rotation = 10
-    save_video = True
+    save_video = False
 
     map_dict = json.load(open("configs/poser.json"))
     # perform mapping segment -> imu sensor
@@ -35,14 +35,14 @@ if __name__ == '__main__':
     os.makedirs(target_dir, exist_ok=True)
     name = "skeleton_video-37-155_simultaneous.mp4"
     video_fr = 5
-
-    base_fr = get_img_from_fig(base_fig)
-    height, width, _ = base_fr.shape
-    fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-    video = cv2.VideoWriter(
-        f'{target_dir}/{name.split(".")[0]}.mp4',
-        fourcc, video_fr,
-        (width, height))
+    if save_video:
+        base_fr = get_img_from_fig(base_fig)
+        height, width, _ = base_fr.shape
+        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
+        video = cv2.VideoWriter(
+            f'{target_dir}/{name.split(".")[0]}.mp4',
+            fourcc, video_fr,
+            (width, height))
 
     for exercise_type in os.listdir(folder_name):
         foldername = f"{folder_name}/{exercise_type}/"
@@ -70,19 +70,21 @@ if __name__ == '__main__':
                         sk_obj.update_landmarks(device_id=dev_id,
                                                 T=T)
                     fig = sk_obj.plot_skeleton(save_video=save_video)
-                    frame = get_img_from_fig(fig)
-                    video.write(frame)
+                    if save_video:
+                        frame = get_img_from_fig(fig)
+                        video.write(frame)
+                    plt.pause(0.1)
 
-                    # check_based_on_rules()
+                # check_based_on_rules()
 
-                    # fig, ax = plot_trajectory(*pos_info,
-                    #                           *body_info,
-                    #                           fig=fig, ax=ax,
-                    #                           azimuthal_rotation=azimuthal_rotation,
-                    #                           animation=animation, sample_rate=sample_rate,
-                    #                           draw_quiver=draw_quiver,
-                    #                           save=save_trajectory, show=show_trajectory,
-                    #                           target_dir=target_dir, save_video=False)
+                # fig, ax = plot_trajectory(*pos_info,
+                #                           *body_info,
+                #                           fig=fig, ax=ax,
+                #                           azimuthal_rotation=azimuthal_rotation,
+                #                           animation=animation, sample_rate=sample_rate,
+                #                           draw_quiver=draw_quiver,
+                #                           save=save_trajectory, show=show_trajectory,
+                #                           target_dir=target_dir, save_video=False)
                 # plot_fft(*acc_info,
                 #          save=save_fft, show=show_fft,
                 #          target_dir=target_dir)
@@ -90,7 +92,8 @@ if __name__ == '__main__':
                 # y = pos_info[1].reshape(-1, 1)
                 # dist, warp = compute_dtw(x, y)
                 # print(dist)
-                # plt.show()
+                plt.show()
+        # plt.show()
         if save_video:
             cv2.destroyAllWindows()
             video.release()

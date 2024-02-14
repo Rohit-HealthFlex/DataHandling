@@ -148,6 +148,9 @@ class Skeleton:
         ax.set_xlabel("X")
         ax.set_ylabel("Y")
         ax.set_zlabel("Z")
+        ax.set_xlim((-1, 1))
+        ax.set_ylim((-1, 1))
+        ax.set_zlim((-1, 1))
         ax.view_init(azim=-37, elev=-155)
         self.estimate_angle()
 
