@@ -49,7 +49,7 @@ def compute_dtw(x, y):
 
 if __name__ == "__main__":
     x = np.array([2, 2, 1, 3, 1, 2, 2, 4, 56, 6, 45, 4]).reshape(-1, 1)
-    y = np.array([2, 2, 2, 2, 2, 1, 1, 1, 3, 1, 2, 2, 2,
+    y = np.array([2, 2, 2, 2, 2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 3, 1, 2, 2, 2,
                   2, 4, 56, 6, 45, 4]).reshape(-1, 1)
     print(x.shape, y.shape)
 

@@ -59,9 +59,9 @@ class Segment:
 
         vec0 = self.rotate_joint(vec0, rot_T)
         vec1 = self.rotate_joint(vec1, rot_T)
-        print("after rotation", self.device_id, vec0)
+        # print("after rotation", self.device_id, vec0)
 
-        # maybe reset
+        # # maybe reset
         # vec0 += trans_T
         # vec1 += trans_T
 
@@ -94,6 +94,8 @@ class Skeleton:
             self.joints[idx] = {"bone": point_pair, "device": device_id}
         self.mean_length = self.get_mean_length()
         self.init_landmark = deepcopy(self.landmarks)
+        self.azim = 90
+        self.elev = 90
         # self.trajectory = [base_landmarks]
 
     def get_mean_length(self):
@@ -143,9 +145,12 @@ class Skeleton:
         #                            expected_length=self.mean_length[f"{st}_{end}"])
         #     self.landmarks[st] = vec0
         #     self.landmarks[end] = vec1
+
+        # TODO : axis reset
         x, y, z = self.landmarks[:,
                                  0], self.landmarks[:, 1],  self.landmarks[:, 2]
         ax.scatter(x[pos], y[pos], z[pos])
+        ax.view_init(azim=self.azim, elev=self.elev)
 
         for idx in self.joints:
             bone = self.joints[idx]["bone"]
@@ -164,10 +169,11 @@ class Skeleton:
         ax.set_xlim((-1, 1))
         ax.set_ylim((-1, 1))
         ax.set_zlim((-1, 1))
-        ax.view_init(azim=-90, elev=-90)
-        self.estimate_angle()
 
+        self.estimate_angle()
         if save_video:
+            self.azim += 10
+            self.elev += 10
             return fig
         plt.show()
         # self.landmarks = deepcopy(self.init_landmark)

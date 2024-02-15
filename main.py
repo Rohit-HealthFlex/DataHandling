@@ -12,6 +12,7 @@ from sim_calc import compute_dtw, compute_accumulated_cost_matrix
 if __name__ == '__main__':
     folder_name = "data/test/"
     req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°)"
+
     device_ids = []
     animation = True
     sample_rate = 30
@@ -68,7 +69,6 @@ if __name__ == '__main__':
                     for dev_id in dev_info:
                         T = dev_info[dev_id][0][k]
                         pos_T = dev_info[dev_id][1][k]
-                        print(pos_T)
 
                         sk_obj.update_landmarks(device_id=dev_id,
                                                 rot_T=T, trans_T=pos_T)
@@ -78,28 +78,32 @@ if __name__ == '__main__':
                     if save_video:
                         frame = get_img_from_fig(fig)
                         video.write(frame)
-                    plt.pause(0.1)
+                    else:
+                        plt.pause(0.1)
 
-                # check_based_on_rules()
-
-                # fig, ax = plot_trajectory(*pos_info,
-                #                           *body_info,
-                #                           fig=fig, ax=ax,
-                #                           azimuthal_rotation=azimuthal_rotation,
-                #                           animation=animation, sample_rate=sample_rate,
-                #                           draw_quiver=draw_quiver,
-                #                           save=save_trajectory, show=show_trajectory,
-                #                           target_dir=target_dir, save_video=False)
-                # plot_fft(*acc_info,
-                #          save=save_fft, show=show_fft,
-                #          target_dir=target_dir)
-                # x = pos_info[0].reshape(-1, 1)
-                # y = pos_info[1].reshape(-1, 1)
-                # dist, warp = compute_dtw(x, y)
-                # print(dist)
-                plt.show()
-        # plt.show()
         if save_video:
             cv2.destroyAllWindows()
             video.release()
+        else:
+            plt.show()
         break
+
+
+# check_based_on_rules()
+
+# fig, ax = plot_trajectory(*pos_info,
+#                           *body_info,
+#                           fig=fig, ax=ax,
+#                           azimuthal_rotation=azimuthal_rotation,
+#                           animation=animation, sample_rate=sample_rate,
+#                           draw_quiver=draw_quiver,
+#                           save=save_trajectory, show=show_trajectory,
+#                           target_dir=target_dir, save_video=False)
+# plot_fft(*acc_info,
+#          save=save_fft, show=show_fft,
+#          target_dir=target_dir)
+# x = pos_info[0].reshape(-1, 1)
+# y = pos_info[1].reshape(-1, 1)
+# dist, warp = compute_dtw(x, y)
+# print(dist)
+# plt.show()

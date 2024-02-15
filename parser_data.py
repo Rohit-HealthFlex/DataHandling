@@ -99,12 +99,12 @@ class DataParser:
 
         for i in range(x.shape[0]):
             # use negative angles to reverse rotation
-            body_x[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
-                                                          ) @ self.R_z(-yaw[i]) @ earth_x[:, i]
-            body_y[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
-                                                          ) @ self.R_z(-yaw[i]) @ earth_y[:, i]
-            body_z[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
-                                                          ) @ self.R_z(-yaw[i]) @ earth_z[:, i]
+            # body_x[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
+            #                                               ) @ self.R_z(-yaw[i]) @ earth_x[:, i]
+            # body_y[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
+            #                                               ) @ self.R_z(-yaw[i]) @ earth_y[:, i]
+            # body_z[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
+            #                                               ) @ self.R_z(-yaw[i]) @ earth_z[:, i]
             rot_xyz += [self.R_x(-pitch[i]) @ self.R_y(-roll[i]
                                                        ) @ self.R_z(-yaw[i])]
         pos_info = np.array([x, y, z]).T
