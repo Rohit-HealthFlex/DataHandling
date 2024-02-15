@@ -76,9 +76,9 @@ class DataParser:
         return x, y, z
 
     def get_gyro_angles(self, df):
-        pitch = df["Angle X(°)"].to_numpy()
-        roll = df["Angle Y(°)"].to_numpy()
-        yaw = df["Angle Z(°)"].to_numpy()
+        pitch = df["Angle X(°)"].to_numpy()+180
+        roll = df["Angle Y(°)"].to_numpy()+180
+        yaw = df["Angle Z(°)"].to_numpy()+180
         return pitch, roll, yaw
 
     def parse_data(self, device_id=None, dt=0.01):

@@ -61,10 +61,11 @@ class Segment:
         vec1 = self.rotate_joint(vec1, rot_T)
         print("after rotation", self.device_id, vec0)
 
-        vec0 += trans_T
-        vec1 += trans_T
+        # maybe reset
+        # vec0 += trans_T
+        # vec1 += trans_T
 
-        print("after translation", self.device_id, vec0)
+        # print("after translation", self.device_id, vec0)
         # vec0, vec1 = self.normalize(vec0, vec1)
         landmarks[p0] = vec0
         landmarks[p1] = vec1
@@ -163,7 +164,7 @@ class Skeleton:
         ax.set_xlim((-1, 1))
         ax.set_ylim((-1, 1))
         ax.set_zlim((-1, 1))
-        ax.view_init(azim=-88, elev=-96)
+        ax.view_init(azim=-90, elev=-90)
         self.estimate_angle()
 
         if save_video:

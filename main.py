@@ -72,7 +72,7 @@ if __name__ == '__main__':
 
                         sk_obj.update_landmarks(device_id=dev_id,
                                                 rot_T=T, trans_T=pos_T)
-                        sk_obj.translate(T=pos_T)
+                        # sk_obj.translate(T=pos_T)
 
                     fig = sk_obj.plot_skeleton(save_video=save_video)
                     if save_video:
