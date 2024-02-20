@@ -39,18 +39,6 @@ class DataParser:
                         [np.sin(-z), np.cos(-z), 0],
                         [0,      0,       1]])
 
-    # def read_data(self, filename, req_cols=None):
-    #     df = pd.read_csv(filename)
-    #     df["Time"], df["Device name"] = df["Device name"], df["Time"]
-    #     if req_cols is None:
-    #         req_cols = df.columns
-    #     if isinstance(req_cols, str):
-    #         req_cols = req_cols.strip().split(",")
-    #     req_df = df[req_cols]
-    #     self.device_ids = req_df["Device name"].unique()
-    #     print(req_df)
-    #     return df, req_df
-
     def read_data(self, filename, req_cols=None):
         df = pd.read_csv(filename)
         df = df.reset_index()
@@ -86,7 +74,7 @@ class DataParser:
         acc_x, acc_y, acc_z = self.get_acceleration(req_df)
         x, y, z = self.get_distance(acc_x, acc_y, acc_z, dt)
         pitch, roll, yaw = self.get_gyro_angles(req_df)
-
+        print("@@@", roll[0], pitch[0], yaw[0])
         earth_x = np.array([[1, 0, 0],]*len(x)).T
         earth_y = np.array([[0, 1, 0],]*len(x)).T
         earth_z = np.array([[0, 0, 1],]*len(x)).T
@@ -105,8 +93,13 @@ class DataParser:
             #                                               ) @ self.R_z(-yaw[i]) @ earth_y[:, i]
             # body_z[:, i] = self.R_x(-pitch[i]) @ self.R_y(-roll[i]
             #                                               ) @ self.R_z(-yaw[i]) @ earth_z[:, i]
-            rot_xyz += [self.R_x(-pitch[i]) @ self.R_y(-roll[i]
-                                                       ) @ self.R_z(-yaw[i])]
+            # trans = np.array([x[i], y[i], z[i]])
+            aff_x = self.R_x(-pitch[i])
+            aff_y = self.R_y(-roll[i])
+            aff_z = self.R_z(-yaw[i])
+            aff_xyz = aff_x @ aff_y @ aff_z
+            # aff_xyz[:, -1] += trans
+            rot_xyz += [aff_xyz]
         pos_info = np.array([x, y, z]).T
         body_info = (body_x, body_y, body_z)
         acc_info = (acc_x, acc_y, acc_z)

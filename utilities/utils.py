@@ -44,13 +44,15 @@ def get_axis_wise_angles(line1, line2):
     return out
 
 
-p0 = [0, 0, 0]
-p1 = [1, 1, 0]
-p2 = [2, -1, 1]
-line1 = (np.array(p0), np.array(p1))
-line2 = (np.array(p1), np.array(p2))
-angle = get_angle_bw_line_segments(line1, line2)
-print(angle)
+# p0 = [0, 0, 0]
+# p1 = [1, 1, 0]
+# p2 = [2, -1, 1]
+# line1 = (np.array(p0), np.array(p1))
+# line2 = (np.array(p1), np.array(p2))
+# angle = get_angle_bw_line_segments(line1, line2)
+# print(angle)
 
-out = get_axis_wise_angles(line1, line2)
-show_lines_angles(out)
+# out = get_axis_wise_angles(line1, line2)
+# for k in out:
+#     print(k, "->", out[k]["angle"])
+# show_lines_angles(out)

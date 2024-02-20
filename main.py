@@ -68,6 +68,8 @@ if __name__ == '__main__':
                 for k in tqdm(range(len(rot_mat))):
                     for dev_id in dev_info:
                         T = dev_info[dev_id][0][k]
+                        print(k, dev_id)
+                        print(T)
                         pos_T = dev_info[dev_id][1][k]
 
                         sk_obj.update_landmarks(device_id=dev_id,
