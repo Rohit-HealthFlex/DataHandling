@@ -5,6 +5,7 @@ class Streamer:
     def __init__(self, filename, req_cols=None):
         self.df, self.req_df = self.read_data(filename,
                                               req_cols=req_cols)
+        self.device_ids = self.req_df["Device name"].unique()
 
     def read_data(self, filename, req_cols=None):
         df = pd.read_csv(filename)
