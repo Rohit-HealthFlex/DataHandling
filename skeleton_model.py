@@ -129,6 +129,12 @@ class Skeleton:
                     # print(point_pair, rem_points, angle)
             # print("####")
 
+    def plot_skeleton_anim(self, i):
+        pos = np.delete(range(0, len(self.landmarks)), self.skip_points)
+        x, y, z = self.landmarks[:,
+                                 0], self.landmarks[:, 1],  self.landmarks[:, 2]
+        plt.scatter(x[pos], y[pos], z[pos])
+
     def plot_skeleton(self, save_video=False):
         fig = plt.figure(figsize=(8, 8))
         ax = fig.add_subplot(projection='3d')
@@ -137,16 +143,6 @@ class Skeleton:
         plt.ylim(-1, 1)
         plt.ylim(-1, 1)
         pos = np.delete(range(0, len(self.landmarks)), self.skip_points)
-        # for idx in self.joints:
-        #     bone = self.joints[idx]["bone"]
-        #     st, end = bone[0], bone[1]
-        #     vec0, vec1 = normalize(self.landmarks[st],
-        #                            self.landmarks[end],
-        #                            expected_length=self.mean_length[f"{st}_{end}"])
-        #     self.landmarks[st] = vec0
-        #     self.landmarks[end] = vec1
-
-        # TODO : axis reset
         x, y, z = self.landmarks[:,
                                  0], self.landmarks[:, 1],  self.landmarks[:, 2]
         ax.scatter(x[pos], y[pos], z[pos])
@@ -170,12 +166,12 @@ class Skeleton:
         ax.set_ylim((-1, 1))
         ax.set_zlim((-1, 1))
 
-        self.estimate_angle()
-        if save_video:
-            self.azim += 10
-            self.elev += 10
-            return fig
-        plt.show()
+        # # self.estimate_angle()
+        # if save_video:
+        #     self.azim += 10
+        #     self.elev += 10
+        #     return fig
+        # plt.show()
         # self.landmarks = deepcopy(self.init_landmark)
 
 
