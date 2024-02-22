@@ -26,6 +26,13 @@ class StreamAnim:
         self.fig = plt.figure(figsize=(8, 8))
         self.ax = self.fig.add_subplot(projection='3d')
 
+        self.use_sensor = "fc:66:87:ee:fb:8c"
+        self.sensor_fig = plt.figure(figsize=(8, 8))
+        self.sensor_ax = self.sensor_fig.add_subplot()
+        self.acc_holder = []
+        self.max_size = 100
+        self.pointer = 0
+
     def set_limits(self):
         plt.cla()
         plt.title('Skeleton')
@@ -65,15 +72,42 @@ class StreamAnim:
             self.ax.scatter(x[st], y[st], z[st], c=color, lw=lw)
             self.ax.scatter(x[end], y[end], z[end], c=color, lw=lw)
 
+    def draw_sensor_data(self, i):
+        row = next(self.stream_obj)
+        device_id = row["Device name"]
+        if device_id == self.use_sensor:
+            plt.cla()
+            plt.title(f'acc: {device_id}')
+            pos_info, rot_mat = self.parser_obj.stream_parser(row)
+            self.acc_holder.append(pos_info)
+            np_array = np.array(self.acc_holder)
+            print(np_array.shape)
+            range_ = list(range(self.pointer, len(
+                self.acc_holder)+self.pointer))
+            self.sensor_ax.plot(range_, list(np_array[:, 0]), label="X", c="r")
+            self.sensor_ax.plot(range_, list(np_array[:, 1]), label="Y", c="g")
+            self.sensor_ax.plot(range_, list(np_array[:, 2]), label="Z", c="b")
+            plt.legend(loc="upper right")
+
+            self.sensor_ax.set_ylim((-10, 10))
+
+            self.sensor_ax.set_xlabel("Time")
+            self.sensor_ax.set_ylabel("acceleration")
+
+            if len(self.acc_holder) > self.max_size:
+                self.acc_holder.pop(0)
+                self.pointer += 1
+
     def animate(self):
-        self.ani = FuncAnimation(self.fig,
-                                 self.update,
-                                 interval=500)
+        self.ani = FuncAnimation(self.sensor_fig,
+                                 self.draw_sensor_data,
+                                 interval=1)
 
 
 def main():
     sa = StreamAnim()
     sa.animate()
+    plt.legend()
     plt.show()
 
 
