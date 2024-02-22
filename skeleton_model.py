@@ -126,53 +126,6 @@ class Skeleton:
                     line1 = self.landmarks[point_pair]
                     line2 = self.landmarks[rem_points]
                     angle = get_angle_bw_line_segments(line1, line2)
-                    # print(point_pair, rem_points, angle)
-            # print("####")
-
-    def plot_skeleton_anim(self, i):
-        pos = np.delete(range(0, len(self.landmarks)), self.skip_points)
-        x, y, z = self.landmarks[:,
-                                 0], self.landmarks[:, 1],  self.landmarks[:, 2]
-        plt.scatter(x[pos], y[pos], z[pos])
-
-    def plot_skeleton(self, save_video=False):
-        fig = plt.figure(figsize=(8, 8))
-        ax = fig.add_subplot(projection='3d')
-        plt.title('Skeleton')
-        plt.xlim(-1, 1)
-        plt.ylim(-1, 1)
-        plt.ylim(-1, 1)
-        pos = np.delete(range(0, len(self.landmarks)), self.skip_points)
-        x, y, z = self.landmarks[:,
-                                 0], self.landmarks[:, 1],  self.landmarks[:, 2]
-        ax.scatter(x[pos], y[pos], z[pos])
-        ax.view_init(azim=self.azim, elev=self.elev)
-
-        for idx in self.joints:
-            bone = self.joints[idx]["bone"]
-            color, lw = "b", 2
-            if self.joints[idx]["device"] != "###":
-                color, lw = "r", 4
-            st, end = bone[0], bone[1]
-            ax.plot([x[st], x[end]], [y[st], y[end]],
-                    [z[st], z[end]], c=color, lw=lw)
-            ax.scatter(x[st], y[st], z[st], c=color, lw=lw)
-            ax.scatter(x[end], y[end], z[end], c=color, lw=lw)
-
-        ax.set_xlabel("X")
-        ax.set_ylabel("Y")
-        ax.set_zlabel("Z")
-        ax.set_xlim((-1, 1))
-        ax.set_ylim((-1, 1))
-        ax.set_zlim((-1, 1))
-
-        # # self.estimate_angle()
-        # if save_video:
-        #     self.azim += 10
-        #     self.elev += 10
-        #     return fig
-        # plt.show()
-        # self.landmarks = deepcopy(self.init_landmark)
 
 
 if __name__ == "__main__":
