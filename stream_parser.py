@@ -52,9 +52,16 @@ class StreamParser:
         yaw = df["Angle Z(°)"]+180
         return pitch, roll, yaw
 
+    def get_mag_values(self, df):
+        x = df["Magnetic field X(ʯt)"]
+        y = df["Magnetic field Y(ʯt)"]
+        z = df["Magnetic field Z(ʯt)"]
+        return x, y, z
+
     def stream_parser(self, row, dt=0.01):
         pitch, roll, yaw = self.get_gyro_angles(row)
         lin_x, lin_y, lin_z = self.get_linear_acceleration(row)
+        mag_x, mag_y, mag_z = self.get_mag_values(row)
 
         earth_x = np.array([1, 0, 0]).T
         earth_y = np.array([0, 1, 0]).T
@@ -71,4 +78,6 @@ class StreamParser:
 
         # x, y, z = self.get_distance(x, y, z, dt=dt)
         pos_info = np.array([acc_x_earth, acc_y_earth, acc_z_earth]).T
-        return pos_info, rot_xyz
+        rot_info = np.array([pitch, roll, yaw]).T
+        mag_info = np.array([mag_x, mag_y, mag_z]).T
+        return pos_info, rot_xyz, rot_info, mag_info

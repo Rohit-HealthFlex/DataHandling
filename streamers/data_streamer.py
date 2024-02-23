@@ -19,5 +19,5 @@ class Streamer:
         return df, req_df
 
     def stream(self):
-        for i in range(len(self.req_df)):
+        for i in range(len(self.req_df))[:]:
             yield self.req_df.iloc[i, :]
