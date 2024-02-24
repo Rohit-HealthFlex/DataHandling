@@ -8,7 +8,7 @@ warnings.filterwarnings("ignore")
 
 class StreamParser:
     def __init__(self):
-        pass
+        self.real_acc = []
 
     @staticmethod
     def R_x(x):
@@ -41,6 +41,7 @@ class StreamParser:
         return acc_x, acc_y, acc_z
 
     def get_distance(self, acc_x, acc_y, acc_z, dt=0.01):
+        print(acc_x.shape)
         x = cumtrapz(cumtrapz(acc_x, dx=dt), dx=dt)
         y = cumtrapz(cumtrapz(acc_y, dx=dt), dx=dt)
         z = cumtrapz(cumtrapz(acc_z, dx=dt), dx=dt)
@@ -69,15 +70,20 @@ class StreamParser:
 
         rot_x, rot_y, rot_z = self.R_x(-pitch), self.R_y(-roll), self.R_z(-yaw)
         rot_xyz = rot_x @ rot_y @ rot_z
-        lin_acc_vec = np.array([lin_x, lin_y, lin_z])
 
-        acc_x_earth, acc_y_earth, acc_z_earth = np.dot(rot_xyz, lin_acc_vec)
+        # acc_x_earth, acc_y_earth, acc_z_earth = np.dot(rot_xyz, lin_acc_vec)
 
         # trans = np.array([x_earth, y_earth, z_earth])
         # rot_xyz[:, -1] += trans
 
-        # x, y, z = self.get_distance(x, y, z, dt=dt)
-        pos_info = np.array([acc_x_earth, acc_y_earth, acc_z_earth]).T
+        pos_info = []
+        self.real_acc.append([lin_x, lin_y, lin_z])
+        if len(self.real_acc) >= 3:
+            real_acc = np.array(self.real_acc)
+            x, y, z = self.get_distance(
+                real_acc[:, 0], real_acc[:, 1], real_acc[:, 2], dt=dt)
+            pos_info = np.array([x, y, z]).T
+        acc_info = np.array([lin_x, lin_y, lin_z]).T
         rot_info = np.array([pitch, roll, yaw]).T
         mag_info = np.array([mag_x, mag_y, mag_z]).T
-        return pos_info, rot_xyz, rot_info, mag_info
+        return pos_info, acc_info, rot_xyz, rot_info, mag_info

@@ -46,7 +46,9 @@ class StreamAnim:
             row = next(self.stream_obj)
             device_id = row["Device name"]
             trace[device_id] = 0
-            pos_info, rot_mat, _, _ = self.parser_obj.stream_parser(row)
+            pos_info, _, rot_mat, _, _ = self.parser_obj.stream_parser(row)
+            if not len(pos_info):
+                continue
             self.sk_obj.update_landmarks(device_id=device_id,
                                          rot_T=rot_mat, trans_T=pos_info)
         self.set_limits()
@@ -158,6 +160,6 @@ if __name__ == "__main__":
               "map_json": map_json,
               "use_sensor": use_sensor,
               "skele": True,
-              "ms": 100}
+              "ms": 500}
 
     main(params)
