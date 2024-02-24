@@ -77,9 +77,9 @@ class StreamAnim:
         device_id = row["Device name"]
         if device_id == self.use_sensor:
             self.sensor_fig.suptitle(f'acc: {device_id}')
-            pos_info, _, rot_info, mag_info = self.parser_obj.stream_parser(
+            _, acc_info, rot_info, mag_info = self.parser_obj.stream_parser(
                 row)
-            info = {"acc": pos_info, "rot": rot_info, "mag": mag_info}
+            info = {"acc": acc_info, "rot": rot_info, "mag": mag_info}
             for idx, attr in enumerate(self.holder):
                 if self.grid_shape[1] == 2:
                     sensor_ax = self.sensor_ax[idx][0]
