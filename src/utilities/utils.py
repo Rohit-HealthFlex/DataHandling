@@ -44,6 +44,39 @@ def get_axis_wise_angles(line1, line2):
     return out
 
 
+def make_joint_pairs(devices_pos_list):
+    pairs = []
+    for i in range(len(devices_pos_list)-1):
+        for j in range(i+1, len(devices_pos_list)):
+            sensor1 = devices_pos_list[i]["ids"]
+            sensor2 = devices_pos_list[j]["ids"]
+            j0, j1 = sensor1.split("_")
+            j2, j3 = sensor2.split("_")
+            segments = set([j0, j1, j2, j3])
+            if len(segments) == 3:
+                pair_info = {"name": f"{sensor1}-{sensor2}",
+                             }
+                pairs.append(pair_info)
+
+
+def get_angle_bw_rot_mat(P, Q):
+    R = np.dot(P, Q.T)
+    cos_theta = (np.trace(R)-1)/2
+    cos_theta = np.clip(cos_theta, -1, 1)
+    return np.arccos(cos_theta) * (180/np.pi)
+
+
+def calculate_rot_angle(rot_A, rot_B):
+    pairs = {"x-y": [0, 1], "y-z": [1, 2], "x-z": [0, 2]}
+    out = {}
+    for k, pair in pairs.items():
+        a_axis = rot_A[pair[0]]
+        b_axis = rot_B[pair[1]]
+        angle = get_angle_bw_rot_mat(a_axis, b_axis)
+        out[k] = angle
+    return out
+
+
 # p0 = [0, 0, 0]
 # p1 = [1, 1, 0]
 # p2 = [2, -1, 1]

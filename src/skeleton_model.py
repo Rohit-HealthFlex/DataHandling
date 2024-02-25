@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 
-from utilities.utils import get_angle_bw_line_segments
+from src.utilities.utils import get_angle_bw_line_segments
 
 
 def normalize(st, end, expected_length=0.3):

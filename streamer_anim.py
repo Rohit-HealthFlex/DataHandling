@@ -3,11 +3,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation
 
-from stream_parser import StreamParser
-from skeleton_model import Skeleton
+from src.stream_parser import StreamParser
+from src.skeleton_model import Skeleton
 
 # custom stream class
-from streamers.data_streamer import Streamer
+from src.streamers.data_streamer import Streamer
 
 
 class StreamAnim:
@@ -46,7 +46,7 @@ class StreamAnim:
             row = next(self.stream_obj)
             device_id = row["Device name"]
             trace[device_id] = 0
-            pos_info, _, rot_mat, _, _ = self.parser_obj.stream_parser(row)
+            pos_info, _, rot_mat, _, _, _ = self.parser_obj.stream_parser(row)
             if not len(pos_info):
                 continue
             self.sk_obj.update_landmarks(device_id=device_id,
@@ -77,7 +77,7 @@ class StreamAnim:
         device_id = row["Device name"]
         if device_id == self.use_sensor:
             self.sensor_fig.suptitle(f'acc: {device_id}')
-            _, acc_info, rot_info, mag_info = self.parser_obj.stream_parser(
+            _, acc_info, _, rot_info, mag_info, _ = self.parser_obj.stream_parser(
                 row)
             info = {"acc": acc_info, "rot": rot_info, "mag": mag_info}
             for idx, attr in enumerate(self.holder):
