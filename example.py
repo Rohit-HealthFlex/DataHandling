@@ -7,7 +7,7 @@ from src.streamers.data_streamer import Streamer
 
 from src.rules.rule0 import Rule0
 
-data_path = "data/test/Ideal -  Backward Lunge/data__1.csv"
+data_path = "data/test/Heel Slide Forward/Heel_Slide_Forward.csv"
 req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°),Magnetic field X(ʯt),Magnetic field Y(ʯt),Magnetic field Z(ʯt)"
 streamer = Streamer(filename=data_path,
                     req_cols=req_cols)
@@ -17,7 +17,7 @@ rule0 = Rule0()
 parser_obj = StreamParser()
 map_json = json.load(open("configs/poser.json"))
 # pair around which angle has to be calculated
-sensor_pairs = [("fc:66:87:ee:fb:8c", "d7:f5:e1:06:da:71")]
+sensor_pairs = [("e5:96:eb:33:1a:dd","e0:3a:df:63:bd:23",)] #thigh first, then shin
 
 devices_pos_dict = {}
 for row in streamer.stream():

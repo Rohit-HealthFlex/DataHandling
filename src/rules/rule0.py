@@ -7,22 +7,22 @@ class Rule0:
 
     def position_rule(self, position):
         error = {"flag": False, "val": None, "type": "position"}
-        if not 10 < position["x"] < 30:
-            error["flag"] = True
-            error["val"] = position
+        #if not 10 < position["x"] < 30:
+        #error["flag"] = True
+        #error["val"] = position
 
         return error
 
     def rotation_rule(self, direction):
         error = {"flag": False, "val": None, "type": "rotation"}
-        if "up" in direction and "left" in direction:
-            error["flag"] = True
-            error["val"] = direction
+        #if "up" in direction and "left" in direction:
+        #error["flag"] = True
+        #error["val"] = direction
         return error
 
     def angle_rule(self, angle_info):
         error = {"flag": False, "val": None, "type": "angle"}
-        if 30 < angle_info["x-y"] < 150:
+        if (0 < angle_info["x-y"] < 10) and (50 < angle_info["y-z"] < 90) and (50 < angle_info["x-z"] < 90):
             error["flag"] = True
             error["val"] = angle_info
             error["type"] = "angle"

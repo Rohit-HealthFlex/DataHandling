@@ -47,9 +47,15 @@ class StreamParser:
         return x, y, z
 
     def get_gyro_angles(self, df):
-        pitch = df["Angle X(°)"]+180
-        roll = df["Angle Y(°)"]+180
-        yaw = df["Angle Z(°)"]+180
+        pitch = df["Angle X(°)"]
+        #if pitch < 0:
+        #    pitch += 360
+        roll = df["Angle Y(°)"]
+        #if roll < 0:
+        #    roll += 180
+        yaw = df["Angle Z(°)"]
+        #if yaw < 0:
+        #    yaw += 360
         return pitch, roll, yaw
 
     def get_mag_values(self, df):

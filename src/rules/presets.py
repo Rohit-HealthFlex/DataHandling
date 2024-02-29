@@ -6,6 +6,8 @@ class Presets:
         self.direction = {"z": ["top", "down", ""],
                           "y": ["left", "right", ""],
                           "x": ["front", "back", ""]}
+        self.angle_hold = []
+        self.position_hold = []
 
     def get_direction(self, rot_info):
         dir_vals = []
@@ -33,11 +35,15 @@ class Presets:
         sensor0_rot = angle_info[0][1]["rot"]
         sensor1_rot = angle_info[1][1]["rot"]
         out = calculate_rot_angle(sensor0_rot, sensor1_rot)
+        self.angle_hold.append(out)
+        print(self.angle_hold[0])
         return out
 
     def get_position(self, pos_info):
         if len(pos_info) != 3:
             return
+        self.position_hold.append(pos_info)
+        print(self.position_hold[0])
         return {"x": pos_info[0],
                 "y": pos_info[1],
                 "z": pos_info[2]}
