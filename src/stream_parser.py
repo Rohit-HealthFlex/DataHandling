@@ -92,4 +92,5 @@ class StreamParser:
         acc_info = np.array([lin_x, lin_y, lin_z]).T
         rot_info = np.array([pitch, roll, yaw]).T
         mag_info = np.array([mag_x, mag_y, mag_z]).T
-        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat
+        xyz_angle_info = [roll, pitch, yaw]
+        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat, xyz_angle_info

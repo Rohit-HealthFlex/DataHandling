@@ -8,8 +8,8 @@ class Rule0:
     def position_rule(self, position):
         error = {"flag": False, "val": None, "type": "position"}
         #if not 10 < position["x"] < 30:
-        #error["flag"] = True
-        #error["val"] = position
+        error["flag"] = True
+        error["val"] = position
 
         return error
 
@@ -27,8 +27,16 @@ class Rule0:
             error["val"] = angle_info
             error["type"] = "angle"
         return error
+    
+    def distance_rule(self, dist):
+        error = {"flag": False, "val": None, "type": "rotation"}
+        #if "up" in direction and "left" in direction:
+        error["flag"] = True
+        error["type"] = "distance"
+        error["val"] = dist
+        return error
 
-    def apply_rule(self, direction, position, angle_info):
+    def apply_rule(self, direction, position, angle_info, dist):
 
         # write rules below using processed presets
         # RANDOM RULES BELOW
@@ -43,5 +51,9 @@ class Rule0:
         if self.check_value(position):
             pos_rule = self.position_rule(position)
 
-        flag = rot_rule["flag"] and angle_rule["flag"] and pos_rule["flag"]
-        return flag, [rot_rule, pos_rule, angle_rule]
+        distance_rule = {"flag": True}
+        if self.check_value(dist):
+            distance_rule = self.distance_rule(dist)
+
+        flag = rot_rule["flag"] and angle_rule["flag"] and pos_rule["flag"] and distance_rule
+        return flag, [rot_rule, pos_rule, angle_rule, distance_rule]

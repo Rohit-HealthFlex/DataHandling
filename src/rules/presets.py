@@ -1,4 +1,5 @@
 from src.utilities.utils import calculate_rot_angle
+import numpy as np
 
 
 class Presets:
@@ -7,7 +8,7 @@ class Presets:
                           "y": ["left", "right", ""],
                           "x": ["front", "back", ""]}
         self.angle_hold = []
-        self.position_hold = []
+        self.xyz_angle_hold = [] #used to hold roll pitch yaw values
 
     def get_direction(self, rot_info):
         dir_vals = []
@@ -36,14 +37,26 @@ class Presets:
         sensor1_rot = angle_info[1][1]["rot"]
         out = calculate_rot_angle(sensor0_rot, sensor1_rot)
         self.angle_hold.append(out)
-        print(self.angle_hold[0])
+        #print(self.angle_hold[0])
         return out
 
     def get_position(self, pos_info):
         if len(pos_info) != 3:
             return
-        self.position_hold.append(pos_info)
-        print(self.position_hold[0])
         return {"x": pos_info[0],
                 "y": pos_info[1],
                 "z": pos_info[2]}
+    
+    def get_distance(self, pos_info):
+        if len(pos_info) != 3:
+            return
+        p1 = np.array([0, 0, 0])
+        p2 = np.array([pos_info[0], pos_info[1], pos_info[2]])
+        squared_dist = np.sum((p1-p2)**2, axis=0)
+        dist = np.sqrt(squared_dist)
+        return dist
+
+"""     
+    def get_starting_position(self):
+    pass 
+"""
