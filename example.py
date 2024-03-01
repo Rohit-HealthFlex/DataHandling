@@ -7,7 +7,8 @@ from src.streamers.data_streamer import Streamer
 
 from src.rules.rule0 import Rule0
 
-data_path = "data/test/Heel Slide Correct Facing Back-Left/data__1.csv"
+# Not using relative path
+data_path = "/home/prathikhf/git_clones/DataHandling/data/test/Heel Slide Wrong Standing Knee Flexion facing right/data__1.csv"
 req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°),Magnetic field X(ʯt),Magnetic field Y(ʯt),Magnetic field Z(ʯt)"
 streamer = Streamer(filename=data_path,
                     req_cols=req_cols)
@@ -15,7 +16,7 @@ streamer = Streamer(filename=data_path,
 preset_obj = Presets()
 rule0 = Rule0()
 parser_obj = StreamParser()
-map_json = json.load(open("configs/poser.json"))
+map_json = json.load(open("/home/prathikhf/git_clones/DataHandling/configs/poser.json"))
 # pair around which angle has to be calculated
 sensor_pairs = [("e5:96:eb:33:1a:dd","e0:3a:df:63:bd:23",)] #thigh first, then shin
 

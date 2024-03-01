@@ -21,14 +21,20 @@ class Rule0:   # Building for seated heel slides
 
     def angle_rule(self, angle_info):
         error = {"flag": False, "val": None, "type": "angle"}
+
+        # Rule for Heel Slide facing Back and Forward
         if (-10 < angle_info["x-y"] < 10) and (40 < angle_info["y-z"] < 100) and (40 < angle_info["x-z"] < 100):
             error["flag"] = True
             error["val"] = angle_info
             error["type"] = "angle"
+
+        # Rule for Heel Slide facing right
         elif (0 < angle_info["x-y"] < 6) and (110 < angle_info["y-z"] < 159) and (110 < angle_info["x-z"] < 159):
             error["flag"] = True
             error["val"] = angle_info
             error["type"] = "angle"
+
+        # Rule for Heel Slide facing left
         elif (0 < angle_info["x-y"] < 5) and (0 < angle_info["y-z"] < 39) and (0 < angle_info["y-z"] < 39):
             error["flag"] = True
             error["val"] = angle_info
