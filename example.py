@@ -7,7 +7,7 @@ from src.streamers.data_streamer import Streamer
 
 from src.rules.rule0 import Rule0
 
-data_path = "data/test/Heel Slide Wrong Left Rise/data__1.csv"
+data_path = "data/test/Heel Slide Correct Facing Back-Left/data__1.csv"
 req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°),Magnetic field X(ʯt),Magnetic field Y(ʯt),Magnetic field Z(ʯt)"
 streamer = Streamer(filename=data_path,
                     req_cols=req_cols)

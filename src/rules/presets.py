@@ -37,7 +37,7 @@ class Presets:
         sensor1_rot = angle_info[1][1]["rot"]
         out = calculate_rot_angle(sensor0_rot, sensor1_rot)
         self.angle_hold.append(out)
-        #print(self.angle_hold[0])
+        print(self.angle_hold[0])
         return out
 
     def get_position(self, pos_info):
@@ -57,6 +57,6 @@ class Presets:
         return dist
 
 """     
-    def get_starting_position(self):
-    pass 
+    def check_starting_position(self):
+        
 """
