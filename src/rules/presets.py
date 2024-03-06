@@ -13,7 +13,7 @@ class Presets:
     def get_direction(self, rot_info):
         dir_vals = []
         rot_x, rot_y, rot_z = rot_info
-        x_flag = rot_x > 180
+        x_flag = rot_x < 180
         if rot_x == 0:
             x_flag = -1
         dir_vals.append(self.direction["x"][x_flag])
@@ -37,7 +37,7 @@ class Presets:
         sensor1_rot = angle_info[1][1]["rot"]
         out = calculate_rot_angle(sensor0_rot, sensor1_rot)
         self.angle_hold.append(out)
-        print(self.angle_hold[0])
+        #print(self.angle_hold[0])
         return out
 
     def get_position(self, pos_info):
@@ -55,6 +55,11 @@ class Presets:
         squared_dist = np.sum((p1-p2)**2, axis=0)
         dist = np.sqrt(squared_dist)
         return dist
+"""     
+    def angle_bn_sensor(self, xyz_angle_info):
+        if len(xyz_angle_info) != 3:
+            return
+         """
 
 """     
     def check_starting_position(self):

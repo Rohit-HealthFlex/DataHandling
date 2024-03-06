@@ -46,22 +46,18 @@ class StreamParser:
         z = cumtrapz(cumtrapz(acc_z, dx=dt), dx=dt)
         return x, y, z
 
+    # Changed Column names to fit sensor script
     def get_gyro_angles(self, df):
-        pitch = df["Angle X(°)"]
-        #if pitch < 0:
-        #    pitch += 360
-        roll = df["Angle Y(°)"]
-        #if roll < 0:
-        #    roll += 180
-        yaw = df["Angle Z(°)"]
-        #if yaw < 0:
-        #    yaw += 360
+        pitch = df["Angle X"]
+        roll = df["Angle Y"]
+        yaw = df["Angle Z"]
         return pitch, roll, yaw
 
+    # Changed Column names to fit sensor script
     def get_mag_values(self, df):
-        x = df["Magnetic field X(ʯt)"]
-        y = df["Magnetic field Y(ʯt)"]
-        z = df["Magnetic field Z(ʯt)"]
+        x = df["Magnetic field X"]
+        y = df["Magnetic field Y"]
+        z = df["Magnetic field Z"]
         return x, y, z
 
     def stream_parser(self, row, dt=0.01):
@@ -92,5 +88,4 @@ class StreamParser:
         acc_info = np.array([lin_x, lin_y, lin_z]).T
         rot_info = np.array([pitch, roll, yaw]).T
         mag_info = np.array([mag_x, mag_y, mag_z]).T
-        xyz_angle_info = [roll, pitch, yaw]
-        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat, xyz_angle_info
+        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat

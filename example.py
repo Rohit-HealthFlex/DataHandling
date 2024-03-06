@@ -6,26 +6,29 @@ from src.streamers.data_streamer import Streamer
 # from src.skeleton_model import Skeleton
 
 from src.rules.rule0 import Rule0
+from src.rules.rule0 import Rule_Backward_Lunge
 
 # Not using relative path
-data_path = "/home/prathikhf/git_clones/DataHandling/data/test/Heel Slide Wrong Standing Knee Flexion facing right/data__1.csv"
-req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X(°),Angle Y(°),Angle Z(°),Magnetic field X(ʯt),Magnetic field Y(ʯt),Magnetic field Z(ʯt)"
+data_path = "/home/prathikhf/git_clones/DataHandling/data/test/Custom Sensor Script/data_store_rotatebackwardup.csv"
+# Changed column names to fit sensor script
+req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X,Angle Y,Angle Z,Magnetic field X,Magnetic field Y,Magnetic field Z"
 streamer = Streamer(filename=data_path,
                     req_cols=req_cols)
 
 preset_obj = Presets()
 rule0 = Rule0()
+#rule0 = Rule_Backward_Lunge()
 parser_obj = StreamParser()
 map_json = json.load(open("/home/prathikhf/git_clones/DataHandling/configs/poser.json"))
 # pair around which angle has to be calculated
-sensor_pairs = [("e5:96:eb:33:1a:dd","e0:3a:df:63:bd:23",)] #thigh first, then shin
+sensor_pairs = [("e5:96:eb:33:1a:dd","e0:3a:df:63:bd:23")] #thigh first, then shin
 
 devices_pos_dict = {}
 for row in streamer.stream():
     device_id = row["Device name"]
 
     # preprocessing
-    pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat, xyz_angle_info = parser_obj.stream_parser(
+    pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat = parser_obj.stream_parser(
         row)
     devices_pos_dict[device_id] = {"pos": pos_info,
                                    "rot": rot_mat}
