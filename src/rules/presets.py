@@ -13,7 +13,7 @@ class Presets:
     def get_direction(self, rot_info):
         dir_vals = []
         rot_x, rot_y, rot_z = rot_info
-        x_flag = rot_x < 180
+        x_flag = rot_x > 180
         if rot_x == 0:
             x_flag = -1
         dir_vals.append(self.direction["x"][x_flag])

@@ -5,7 +5,7 @@ import pandas as pd
 import time
 
 # MAC addresses of the devices
-device_mac_addresses = ["E0:3A:DF:63:BD:23", "E5:96:EB:33:1A:DD"]
+device_mac_addresses = ["e0:3a:df:63:bd:23", "e5:96:eb:33:1a:dd"]
 
 # UUIDs for the service and characteristic
 service_uuid = "0000ffe5-0000-1000-8000-00805f9a34fb"
@@ -28,10 +28,11 @@ def parse_data_packet(data_packet):
 
 async def connect_and_receive_notifications(device_mac_address):
     df = pd.DataFrame(columns=["Time", "Device name", "Chip Time()", "Acceleration X(g)", 
-                               "Acceleration Y(g)", "Acceleration Z(g)", "Angular velocity X(°/s)", 
-                               "Angular velocity Y(°/s)", "Angular velocity Z(°/s)", 
-                               "Angle X(°)", "Angle Y(°)", "Angle Z(°)", 
-                               "Gyroscope X", "Gyroscope Y", "Gyroscope Z"])
+                               "Acceleration Y(g)", "Acceleration Z(g)", "Angular velocity X", 
+                               "Angular velocity Y", "Angular velocity Z", 
+                               "Angle X", "Angle Y", "Angle Z", "Magnetic field X",
+                               "Magnetic field Y", "Magnetic field Z","Gyroscope X",
+                               "Gyroscope Y", "Gyroscope Z"])
 
     async with BleakClient(device_mac_address) as client:
         print(f"Connected to device with MAC address: {device_mac_address}")
@@ -47,15 +48,18 @@ async def connect_and_receive_notifications(device_mac_address):
                        "Acceleration X(g)": ax, 
                        "Acceleration Y(g)": ay, 
                        "Acceleration Z(g)": az,
-                       "Angular velocity X(°/s)": null_value,
-                       "Angular velocity Y(°/s)": null_value,
-                       "Angular velocity Z(°/s)": null_value,
-                       "Angle X(°)": Pitch,
-                       "Angle Y(°)": Roll,
-                       "Angle Z(°)": Yaw,
+                       "Angular velocity X": null_value,
+                       "Angular velocity Y": null_value,
+                       "Angular velocity Z": null_value,
+                       "Angle X": Pitch,
+                       "Angle Y": Roll,
+                       "Angle Z": Yaw,
+                       "Magnetic field X": null_value,
+                       "Magnetic field Y": null_value,
+                       "Magnetic field Z": null_value,
                        "Gyroscope X": wx,
                        "Gyroscope Y": wy,
-                       "Gyroscope Z": wz,
+                       "Gyroscope Z": wz
                        }
 
             nonlocal df
@@ -72,7 +76,7 @@ async def connect_and_receive_notifications(device_mac_address):
 
         await client.start_notify(characteristic_uuid, notification_handler)
 
-        await asyncio.sleep(10)  # Stream data for 30 seconds (adjust as needed)
+        await asyncio.sleep(7)  # Stream data for 30 seconds (adjust as needed)
 
         await client.stop_notify(characteristic_uuid)
 
@@ -84,6 +88,6 @@ async def main():
     final_df = pd.concat(dfs)
     final_df["Time"] = pd.to_datetime(final_df["Time"], unit='s')  # Convert Time to datetime
     final_df = final_df.sort_values(by='Time')  # Sort DataFrame based on Time
-    final_df.to_csv('data_store.csv', mode='w', index=False)
+    final_df.to_csv('data_store_rotatebackwardup.csv', mode='w', index=False)
 
 asyncio.run(main())
