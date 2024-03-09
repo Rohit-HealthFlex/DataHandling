@@ -159,7 +159,7 @@ if __name__ == "__main__":
     params = {"streamer": streamer,
               "map_json": map_json,
               "use_sensor": use_sensor,
-              "skele": True,
-              "ms": 500}
+              "skele": False,
+              "ms": 10}
 
     main(params)

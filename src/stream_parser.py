@@ -9,6 +9,7 @@ warnings.filterwarnings("ignore")
 class StreamParser:
     def __init__(self):
         self.real_acc = []
+        self.max_size = 100
 
     @staticmethod
     def R_x(x):
@@ -80,6 +81,8 @@ class StreamParser:
 
         pos_info = []
         self.real_acc.append([lin_x, lin_y, lin_z])
+        if len(self.real_acc) > self.max_size:
+            self.real_acc = self.real_acc[1:]
         if len(self.real_acc) >= 3:
             real_acc = np.array(self.real_acc)
             x, y, z = self.get_distance(
