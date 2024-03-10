@@ -71,7 +71,7 @@ class StreamParser:
         earth_z = np.array([0, 0, 1]).T
 
         rot_x, rot_y, rot_z = self.R_x(-pitch), self.R_y(-roll), self.R_z(-yaw)
-        rot_xyz = rot_x @ rot_y @ rot_z
+        rot_xyz = rot_z @ rot_y @ rot_x
         rot_mat = [rot_x, rot_y, rot_z]
 
         # acc_x_earth, acc_y_earth, acc_z_earth = np.dot(rot_xyz, lin_acc_vec)
