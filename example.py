@@ -9,7 +9,7 @@ from src.rules.rule0 import Rule0
 from src.rules.rule0 import Rule_Backward_Lunge
 
 # Not using relative path
-data_path = "/home/prathikhf/git_clones/DataHandling/data/test/Custom Sensor Script/data_store_rotatebackwardup.csv"
+data_path = "data/test/Custom Sensor Script/test_store_knee_flex.csv"
 # Changed column names to fit sensor script
 req_cols = "Device name,Acceleration X(g),Acceleration Y(g),Acceleration Z(g),Angle X,Angle Y,Angle Z,Magnetic field X,Magnetic field Y,Magnetic field Z"
 streamer = Streamer(filename=data_path,
@@ -28,7 +28,7 @@ for row in streamer.stream():
     device_id = row["Device name"]
 
     # preprocessing
-    pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat = parser_obj.stream_parser(
+    pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat, angles = parser_obj.stream_parser(
         row)
     devices_pos_dict[device_id] = {"pos": pos_info,
                                    "rot": rot_mat}

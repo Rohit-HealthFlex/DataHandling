@@ -39,6 +39,12 @@ class StreamParser:
         acc_y = df["Acceleration Y(g)"]
         acc_z = df["Acceleration Z(g)"]
         return acc_x, acc_y, acc_z
+    
+    def get_velocity(self, acc_x, acc_y, acc_z, dt = 0.01):
+        xv = cumtrapz(acc_x, dx = dt)
+        yv = cumtrapz(acc_y, dx = dt)
+        zv = cumtrapz(acc_z, dx = dt)
+        return xv, yv, zv
 
     def get_distance(self, acc_x, acc_y, acc_z, dt=0.01):
         x = cumtrapz(cumtrapz(acc_x, dx=dt), dx=dt)
@@ -48,8 +54,9 @@ class StreamParser:
 
     # Changed Column names to fit sensor script
     def get_gyro_angles(self, df):
-        pitch = df["Angle X"]
-        roll = df["Angle Y"]
+        # Changed roll and pitch here, roll comes first
+        roll = df["Angle X"]
+        pitch = df["Angle Y"]
         yaw = df["Angle Z"]
         return pitch, roll, yaw
 
@@ -69,8 +76,10 @@ class StreamParser:
         earth_y = np.array([0, 1, 0]).T
         earth_z = np.array([0, 0, 1]).T
 
-        rot_x, rot_y, rot_z = self.R_x(-pitch), self.R_y(-roll), self.R_z(-yaw)
-        rot_xyz = rot_x @ rot_y @ rot_z
+        angles = [roll, pitch, yaw]
+        # Changed roll and pitch here
+        rot_x, rot_y, rot_z = self.R_x(-roll), self.R_y(-pitch), self.R_z(-yaw)
+        rot_xyz = rot_z @ rot_y @ rot_x
         rot_mat = [rot_x, rot_y, rot_z]
 
         # acc_x_earth, acc_y_earth, acc_z_earth = np.dot(rot_xyz, lin_acc_vec)
@@ -88,4 +97,4 @@ class StreamParser:
         acc_info = np.array([lin_x, lin_y, lin_z]).T
         rot_info = np.array([pitch, roll, yaw]).T
         mag_info = np.array([mag_x, mag_y, mag_z]).T
-        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat
+        return pos_info, acc_info, rot_xyz, rot_info, mag_info, rot_mat, angles
