@@ -48,8 +48,14 @@ class Rule0:   # Building for seated heel slides
         error["flag"] = True
         error["val"] = dist
         return error
+    
+    def starting_pos_rule(self, start_pos):
+        error = {"flag": False, "val": None, "type": "start position"}
+        error["flag"] = True
+        error["val"] = start_pos
+        return error
 
-    def apply_rule(self, direction, position, angle_info, dist):
+    def apply_rule(self, direction, position, angle_info, dist, start_pos):
 
         # write rules below using processed presets
         # RANDOM RULES BELOW
@@ -68,8 +74,12 @@ class Rule0:   # Building for seated heel slides
         if self.check_value(dist):
             distance_rule = self.distance_rule(dist)
 
-        flag = rot_rule["flag"] and angle_rule["flag"] and pos_rule["flag"] and distance_rule["flag"]
-        return flag, [rot_rule, pos_rule, angle_rule, distance_rule]
+        starting_pos_rule = {"flag": True}
+        if self.check_value(start_pos):
+            starting_pos_rule = self.starting_pos_rule(start_pos)
+
+        flag = rot_rule["flag"] and angle_rule["flag"] and pos_rule["flag"] and distance_rule["flag"] and starting_pos_rule["flag"]
+        return flag, [pos_rule, starting_pos_rule, angle_rule, distance_rule]
 
 
 ############### Rule for Backward Lunge

@@ -134,7 +134,7 @@ if __name__ == "__main__":
     pos_s1 = np.random.random((3,))
     pos_s2 = np.random.random((3,))
     alpha, beta, gamma = get_eulirean_angles(R1, R2, pos_s1, pos_s2)
-    print(alpha, beta, gamma)
+    
 
 # p0 = [0, 0, 0]
 # p1 = [1, 1, 0]
